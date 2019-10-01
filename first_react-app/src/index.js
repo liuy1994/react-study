@@ -1,12 +1,10 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-import './index.css';
-// import App from './App';
-import ClickCounter from "./ClickCounter";
+import App from './App';
 import * as serviceWorker from './serviceWorker';
 
 ReactDOM.render(
-    <ClickCounter />,
+    <App />,
     document.getElementById('root')
 );
 
