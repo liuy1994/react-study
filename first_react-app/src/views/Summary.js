@@ -11,18 +11,17 @@ class Summary extends Component{
     }
 
     componentDidMount() {
-        SummaryStore.addChangeListener(this.onUpdate)
+        store.subscribe(this.onUpdate)
     }
 
     componentWillUnmount() {
-        SummaryStore.removeChangeListener(this.onUpdate)
+        console.log('unmount')
+        // store.unsubscribe(this.onUpdate)
     }
 
     onUpdate() {
         const sum = SummaryStore.getSummary()
-        this.setState({
-            sum
-        })
+        this.setState(this.getOwnState())
     }
 
     getOwnState() {

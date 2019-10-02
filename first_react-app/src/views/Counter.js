@@ -31,12 +31,12 @@ class Counter extends Component {
     }
 
     onChange() {
-        this.setState(store.getState())
+        this.setState(this.getOwnState())
     }
 
     shouldComponentUpdate(nextProps, nextState) {
         return (nextProps.caption !== this.props.caption) ||
-            (nextState.count !== this.state.count);
+            (nextState.value !== this.state.value);
     }
 
     componentDidMount() {
