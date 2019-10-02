@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import CounterStore from "../stores/CounterStore";
 import * as Actions from '../Actions.js';
+import store from '../Store'
 const buttonStyle = {
     margin: '10px'
 };
@@ -11,25 +12,26 @@ class Counter extends Component {
         this.onChange = this.onChange.bind(this)
         this.onClickIncrementButton = this.onClickIncrementButton.bind(this);
         this.onClickDecrementButton = this.onClickDecrementButton.bind(this);
+        this.getOwnState = this.getOwnState.bind(this);
+        this.state = this.getOwnState()
+    }
 
-        this.state = {
-            count: CounterStore.getCounterValues()[props.caption]
+    getOwnState() {
+        return {
+            value: store.getState()[this.props.caption]
         }
     }
 
     onClickIncrementButton() {
-        Actions.increment(this.props.caption)
+        store.dispatch(Actions.increment(this.props.caption))
     }
 
     onClickDecrementButton() {
-        Actions.decrement(this.props.caption)
+        store.dispatch(Actions.decrement(this.props.caption))
     }
 
     onChange() {
-        const count = CounterStore.getCounterValues()[this.props.caption]
-        this.setState({
-            count
-        })
+        this.setState(store.getState())
     }
 
     shouldComponentUpdate(nextProps, nextState) {
@@ -38,20 +40,22 @@ class Counter extends Component {
     }
 
     componentDidMount() {
-        CounterStore.addChangeListener(this.onChange)
+        store.subscribe(this.onChange)
     }
 
     componentWillUnmount() {
-        CounterStore.removeListener(this.onChange)
+        console.log('unmount')
+        // store.unsubscribe(this.onChange)
     }
 
     render() {
-        const {caption} = this.props;
+        const { caption } = this.props;
+        const { value } = this.state
         return (
             <div>
                 <button style={buttonStyle} onClick={this.onClickIncrementButton}>+</button>
                 <button style={buttonStyle} onClick={this.onClickDecrementButton}>-</button>
-                <span>{caption} count: {this.state.count}</span>
+                <span>{caption} count: { value }</span>
             </div>
         );
     }

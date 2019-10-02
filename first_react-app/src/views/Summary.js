@@ -1,13 +1,13 @@
 import React, { Component } from 'react';
 import SummaryStore from '../stores/SummaryStore.js';
+import store from '../Store'
 
 class Summary extends Component{
     constructor(props) {
         super(props)
         this.onUpdate = this.onUpdate.bind(this)
-        this.state = {
-            sum: SummaryStore.getSummary()
-        }
+        this.getOwnState = this.getOwnState.bind(this);
+        this.state = this.getOwnState()
     }
 
     componentDidMount() {
@@ -25,8 +25,20 @@ class Summary extends Component{
         })
     }
 
+    getOwnState() {
+        const state = store.getState()
+        let sum = 0
+        for (let key in state) {
+            if (state.hasOwnProperty(key)) {
+                sum += state[key]
+            }
+        }
+        return { sum }
+    }
+
     render() {
-        return <div>Total: {this.state.sum}</div>
+        const { sum } = this.state
+        return <div>Total: {sum}</div>
     }
 }
 
