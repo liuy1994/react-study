@@ -1,30 +1,44 @@
 import AppDispatcher from "../AppDispatcher";
-import ActionTypes from '../ActionTypes'
-const countValues = {
-    First: 0,
-    Second: 10,
-    Third: 30
+import * as ActionTypes from '../ActionTypes.js';
+import { EventEmitter } from 'events';
+const CHANGE_EVENT = 'changed';
+
+function computeSummary(counterValues) {
+    let summary = 0;
+    for (const key in counterValues) {
+        if (counterValues.hasOwnProperty(key)) {
+            summary += counterValues[key];
+        }
+    }
+    return summary;
 }
-const CountStore = Object.assign({}, EventEmitter.prototype, {
-    getCountValues: () => {
-        return countValues
+const SummaryStore = Object.assign({}, EventEmitter.prototype, {
+    getSummary: function() {
+        return computeSummary(CounterStore.getCounterValues());
     },
-    emitChange: () => {
-        this.emit(CHANGE_EVENT)
+
+    emitChange: function() {
+        this.emit(CHANGE_EVENT);
     },
-    addChangeListener: callback => {
-        this.on(CHANGE_EVENT, callback)
+
+    addChangeListener: function(callback) {
+        this.on(CHANGE_EVENT, callback);
     },
-    removeListener: callback => {
-        this.removeListener(CHANGE_EVENT, callback)
+
+    removeChangeListener: function(callback) {
+        this.removeListener(CHANGE_EVENT, callback);
     }
-})
-CountStore.dispatchToken = AppDispatcher.register(action => {
-    if (action.type === ActionTypes.INCREMENT) {
-        countValues[action.counterCaption]++
-        CountStore.emitChange()
-    } else if (action.type === ActionTypes.DECREMENT) {
-        countValues[action.counterCaption]--
-        CountStore.emitChange()
+
+});
+
+
+SummaryStore.dispatchToken = AppDispatcher.register((action) => {
+    if ((action.type === ActionTypes.INCREMENT) ||
+        (action.type === ActionTypes.DECREMENT)) {
+        AppDispatcher.waitFor([CounterStore.dispatchToken]);
+
+        SummaryStore.emitChange();
     }
-})
+});
+
+export default SummaryStore;
