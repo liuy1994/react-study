@@ -5,19 +5,19 @@ const CHANGE_EVENT = 'changed';
 const countValues = {
     First: 0,
     Second: 10,
-    Third: 30
+    Third: 25
 }
-const CounterStore = Object.assign({}, new EventEmitter(), {
-    getCounterValues: () => {
+const CounterStore = Object.assign({}, EventEmitter.prototype, {
+    getCounterValues: function() {
         return countValues
     },
-    emitChange: () => {
+    emitChange: function() {
         this.emit(CHANGE_EVENT)
     },
-    addChangeListener: callback => {
+    addChangeListener: function(callback) {
         this.on(CHANGE_EVENT, callback)
     },
-    removeListener: callback => {
+    removeListener: function(callback) {
         this.removeListener(CHANGE_EVENT, callback)
     }
 })

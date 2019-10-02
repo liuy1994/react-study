@@ -14,7 +14,7 @@ function computeSummary(counterValues) {
     }
     return summary;
 }
-const SummaryStore = Object.assign({}, new EventEmitter(), {
+const SummaryStore = Object.assign({}, EventEmitter.prototype, {
     getSummary: function() {
         return computeSummary(CounterStore.getCounterValues());
     },

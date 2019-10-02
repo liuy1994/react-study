@@ -38,7 +38,7 @@ class Counter extends Component {
     }
 
     componentDidMount() {
-        CounterStore.addChangeListener(this.onchange)
+        CounterStore.addChangeListener(this.onChange)
     }
 
     componentWillUnmount() {
