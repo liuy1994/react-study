@@ -132,5 +132,8 @@
     "presets": [
       "react-app"
     ]
+  },
+  "devDependencies": {
+    "events": "^3.0.0"
   }
 }

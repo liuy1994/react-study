@@ -1,6 +1,8 @@
-import AppDispatcher from "../AppDispatcher";
+import AppDispatcher from '../AppDispatcher.js';
 import * as ActionTypes from '../ActionTypes.js';
-import { EventEmitter } from 'events';
+import CounterStore from './CounterStore.js';
+import EventEmitter from 'events';
+
 const CHANGE_EVENT = 'changed';
 
 function computeSummary(counterValues) {
@@ -12,7 +14,7 @@ function computeSummary(counterValues) {
     }
     return summary;
 }
-const SummaryStore = Object.assign({}, EventEmitter.prototype, {
+const SummaryStore = Object.assign({}, new EventEmitter(), {
     getSummary: function() {
         return computeSummary(CounterStore.getCounterValues());
     },

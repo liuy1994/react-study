@@ -1,4 +1,6 @@
 import React, { Component } from 'react'
+import CounterStore from "../stores/CounterStore";
+import * as Actions from '../Actions.js';
 const buttonStyle = {
     margin: '10px'
 };
@@ -6,26 +8,43 @@ class Counter extends Component {
     constructor(props) {
         super(props);
 
+        this.onChange = this.onChange.bind(this)
         this.onClickIncrementButton = this.onClickIncrementButton.bind(this);
         this.onClickDecrementButton = this.onClickDecrementButton.bind(this);
 
         this.state = {
-            count: props.initValue || 0
+            count: CounterStore.getCounterValues()[props.caption]
         }
     }
 
     onClickIncrementButton() {
-        this.setState({count: this.state.count + 1});
+        Actions.increment(this.props.caption)
     }
 
     onClickDecrementButton() {
-        this.setState({count: this.state.count - 1});
+        Actions.decrement(this.props.caption)
+    }
+
+    onChange() {
+        const count = CounterStore.getCounterValues()[this.props.caption]
+        this.setState({
+            count
+        })
     }
 
     shouldComponentUpdate(nextProps, nextState) {
         return (nextProps.caption !== this.props.caption) ||
             (nextState.count !== this.state.count);
     }
+
+    componentDidMount() {
+        CounterStore.addChangeListener(this.onchange)
+    }
+
+    componentWillUnmount() {
+        CounterStore.removeListener(this.onChange)
+    }
+
     render() {
         const {caption} = this.props;
         return (
