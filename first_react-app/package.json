@@ -136,6 +136,7 @@
   },
   "devDependencies": {
     "events": "^3.0.0",
+    "react-redux": "^7.1.1",
     "redux": "^4.0.4"
   }
 }

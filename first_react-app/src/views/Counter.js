@@ -1,64 +1,50 @@
 import React, { Component } from 'react'
-import CounterStore from "../stores/CounterStore";
 import * as Actions from '../Actions.js';
-import store from '../Store'
+import { connect } from 'react-redux'
 const buttonStyle = {
     margin: '10px'
 };
 class Counter extends Component {
-    constructor(props) {
-        super(props);
-
-        this.onChange = this.onChange.bind(this)
-        this.onClickIncrementButton = this.onClickIncrementButton.bind(this);
-        this.onClickDecrementButton = this.onClickDecrementButton.bind(this);
-        this.getOwnState = this.getOwnState.bind(this);
-        this.state = this.getOwnState()
-    }
-
-    getOwnState() {
-        return {
-            value: store.getState()[this.props.caption]
-        }
-    }
-
-    onClickIncrementButton() {
-        store.dispatch(Actions.increment(this.props.caption))
-    }
-
-    onClickDecrementButton() {
-        store.dispatch(Actions.decrement(this.props.caption))
-    }
-
-    onChange() {
-        this.setState(this.getOwnState())
-    }
-
     shouldComponentUpdate(nextProps, nextState) {
         return (nextProps.caption !== this.props.caption) ||
-            (nextState.value !== this.state.value);
+            (nextProps.value !== this.props.value);
     }
 
     componentDidMount() {
-        store.subscribe(this.onChange)
+        console.log('mount')
     }
 
     componentWillUnmount() {
         console.log('unmount')
-        // store.unsubscribe(this.onChange)
     }
 
     render() {
-        const { caption } = this.props;
-        const { value } = this.state
+        const { caption, value, onIncrement, onDecrement } = this.props;
         return (
             <div>
-                <button style={buttonStyle} onClick={this.onClickIncrementButton}>+</button>
-                <button style={buttonStyle} onClick={this.onClickDecrementButton}>-</button>
+                <button style={buttonStyle} onClick={onIncrement}>+</button>
+                <button style={buttonStyle} onClick={onDecrement}>-</button>
                 <span>{caption} count: { value }</span>
             </div>
         );
     }
 }
 
-export default Counter
+function mapState(state, ownProps) {
+    return {
+        value: state[ownProps.caption]
+    }
+}
+
+function mapDispatch(dispatch, ownProps) {
+    return {
+        onIncrement: () => {
+            dispatch(Actions.increment(ownProps.caption));
+        },
+        onDecrement: () => {
+            dispatch(Actions.decrement(ownProps.caption));
+        }
+    }
+}
+
+export default connect(mapState, mapDispatch)(Counter)
