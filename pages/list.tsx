@@ -1,4 +1,4 @@
-import { timeout } from '../services/request';
+import { timeout } from '../request';
 
 const List = props => {
   return <ul>
