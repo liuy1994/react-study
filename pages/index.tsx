@@ -2,9 +2,10 @@ import Link from 'next/link'
 import { Button } from 'antd'
 
 const Index = () => {
+  const type = 'home'
   return (
     <div>
-      <Link href='/home?type=home'>
+      <Link href={`/home?type=${type}`} as={`home/${type}`}>
         <Button>home</Button>
       </Link>
       <Link href='/list'>
