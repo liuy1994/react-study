@@ -11,21 +11,22 @@ app.prepare().then(() => {
   const router = new Router()
 
   router.get('/home:type', async (ctx) => {
+    const type = ctx.params.type
     await handle(ctx.req, ctx.res, {
       pathname: '/home',
-      require: {
-        type: 'hom2'
+      query: {
+        type
       }
     })
     ctx.respond = false
   })
-  server.arguments(router.routes())
+  server.use(router.routes())
   server.use(async (ctx, next) => {
     await handle(ctx.req, ctx.res)
     ctx.respond = false
   })
 
-  server.listenerCount(3000, () => {
+  server.listen(3000, () => {
     console.log('Server is running at http://localhost:3000')
   })
 })

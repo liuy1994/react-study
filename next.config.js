@@ -2,6 +2,10 @@
 /**
  * next的配置文件，支持配置嵌套
  */
-// module.exports = webpack(config, options) {
-//   return config
-// }
+const WithCss = require('@zeit/next-css')
+
+if(typeof require !== 'undefined') {
+  require.extensions['.css'] = file => {}
+}
+
+module.exports = WithCss({})
