@@ -1,7 +1,7 @@
 const Koa = require('koa')
 const Router = require('koa-router')
 const next = require('next')
-
+require.extensions['.less'] = () => {};
 const dev = process.env.NODE_ENV !== 'production'
 const app = next({ dev })
 const handle = app.getRequestHandler()
@@ -21,7 +21,7 @@ app.prepare().then(() => {
     ctx.respond = false
   })
   server.use(router.routes())
-  server.use(async (ctx, next) => {
+  server.use(async (ctx, _next) => {
     await handle(ctx.req, ctx.res)
     ctx.respond = false
   })

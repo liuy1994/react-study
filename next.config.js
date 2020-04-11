@@ -1,11 +1,30 @@
 // next.config.js
-/**
- * next的配置文件，支持配置嵌套
- */
-const WithCss = require('@zeit/next-css')
+const withLess = require('@zeit/next-less')
 
-if(typeof require !== 'undefined') {
-  require.extensions['.css'] = file => {}
+if (typeof require !== 'undefined') {
+    require.extensions['.less'] = () => {}
 }
+module.exports = withLess({
+    cssModules: true, // 开启css modules
+    cssLoaderOptions: {
+        importLoaders: 1,
+        localIdentName: '[local]___[hash:base64:5]',
+    },
+    webpack(config) {
+        const lessRule = {
+            test: /\.less$/,
+            use: [
+                {
+                    loader: 'less-loader',
+                    options: {
+                        javascriptEnabled: true,
+                    }
+                },
+            ]
+        }
 
-module.exports = WithCss({})
+        config.module.rules.push(lessRule)
+        return config
+    },
+})
+

@@ -1,5 +1,6 @@
 import { timeout } from '../request'
 import { withRouter } from 'next/router'
+
 const Home = (props) => {
   const { type } = props.router.query
   return (
