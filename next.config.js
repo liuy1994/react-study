@@ -1,29 +1,28 @@
 // next.config.js
-const withLess = require('@zeit/next-less')
+const withCSS = require('@zeit/next-css')
 
-if (typeof require !== 'undefined') {
-    require.extensions['.less'] = () => {}
-}
-module.exports = withLess({
-    cssModules: true, // 开启css modules
+
+module.exports = withCSS({
+    cssModules: true,
     cssLoaderOptions: {
         importLoaders: 1,
-        localIdentName: '[local]___[hash:base64:5]',
+        localIdentName: "[local]___[hash:base64:5]",
     },
-    webpack(config) {
-        const lessRule = {
-            test: /\.less$/,
+    webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
+        // Note: we provide webpack above so you should not `require` it
+        // Perform customizations to webpack config
+        // Important: return the modified config
+        config.module.rules.push({
+            test: /\.css$/,
             use: [
                 {
-                    loader: 'less-loader',
+                    loader: 'css-loader',
                     options: {
-                        javascriptEnabled: true,
+                        modules: true
                     }
-                },
+                }
             ]
-        }
-
-        config.module.rules.push(lessRule)
+        })
         return config
     },
 })

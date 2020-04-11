@@ -1,7 +1,7 @@
 import Link from 'next/link'
 import { Button } from 'antd'
 
-const styles = require('../styles/index.less')
+const styles = require('../styles/index.css')
 
 const Index = () => {
   const type = 'home'
