@@ -1,29 +1,35 @@
 // next.config.js
-const withCSS = require('@zeit/next-css')
+const withCss = require('@zeit/next-css')
+if (typeof require !== 'undefined') {
+    require.extensions['.css'] = () => {}
+}
 
-
-module.exports = withCSS({
+module.exports = withCss({
     cssModules: true,
     cssLoaderOptions: {
         importLoaders: 1,
         localIdentName: "[local]___[hash:base64:5]",
     },
-    webpack: (config, { buildId, dev, isServer, defaultLoaders, webpack }) => {
-        // Note: we provide webpack above so you should not `require` it
-        // Perform customizations to webpack config
-        // Important: return the modified config
+    webpack(config, options) {
         config.module.rules.push({
             test: /\.css$/,
+            include: [
+                '/node_modules/antd/dist/'
+            ],
             use: [
+                {
+                    loader: 'style-loader',
+                },
                 {
                     loader: 'css-loader',
                     options: {
-                        modules: true
+                        modules: true,
                     }
-                }
+                },
             ]
         })
         return config
-    },
-})
+    }
+});
+
 
